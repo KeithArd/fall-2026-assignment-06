@@ -1,10 +1,8 @@
 function App() {
-  const name = "Keith";
-
   return (
     <div>
-      <h1>Articles</h1>
-      <p>Hello, {name}! This is my React app.</p>
+      <h1>Hello World</h1>
+      <p>This is a React app.</p>
     </div>
   );
 }
