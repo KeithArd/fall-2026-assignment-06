@@ -1,10 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
-
-type Comment = {
-  commentId: number;
-  articleId: number;
-  body: string;
-};
+import CommentItem from "./CommentItem";
+import type { Comment } from "../types";
 
 type CommentsSectionProps = {
   articleId: string;
@@ -48,6 +44,22 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
     setError("");
   }
 
+  function handleUpdate(updatedComment: Comment) {
+    setComments(
+      comments.map((comment) =>
+        comment.commentId === updatedComment.commentId
+          ? updatedComment
+          : comment,
+      ),
+    );
+  }
+
+  function handleDelete(commentId: number) {
+    setComments(
+      comments.filter((comment) => comment.commentId !== commentId),
+    );
+  }
+
   return (
     <section>
       <h2>Comments</h2>
@@ -56,7 +68,12 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
       ) : (
         <ul>
           {comments.map((comment) => (
-            <li key={comment.commentId}>{comment.body}</li>
+            <CommentItem
+              key={comment.commentId}
+              comment={comment}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
           ))}
         </ul>
       )}

@@ -1,12 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router";
 import CommentsSection from "../components/CommentsSection";
-
-type Article = {
-  articleId: number;
-  title: string;
-  contents: string;
-};
+import type { Article } from "../types";
 
 function ArticleDetailPage() {
   const { articleId } = useParams();

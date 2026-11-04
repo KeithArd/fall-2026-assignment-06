@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-
-type Article = {
-  articleId: number;
-  title: string;
-  contents: string;
-};
+import type { Article } from "../types";
 
 const previewLength = 100; // Number of characters to display in the article preview
 
