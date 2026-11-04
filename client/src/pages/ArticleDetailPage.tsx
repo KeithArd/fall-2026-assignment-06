@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router";
+import CommentsSection from "../components/CommentsSection";
 
 type Article = {
   articleId: number;
@@ -96,6 +97,7 @@ function ArticleDetailPage() {
       <p>{article.contents}</p>
       <button onClick={handleEdit}>Edit</button>
       <button onClick={handleDelete}>Delete</button>
+      <CommentsSection articleId={articleId!} />
     </div>
   );
 }
