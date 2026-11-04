@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 type Comment = {
   commentId: number;
@@ -12,6 +12,8 @@ type CommentsSectionProps = {
 
 function CommentsSection({ articleId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
+  const [newBody, setNewBody] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchComments() {
@@ -23,6 +25,28 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
     }
     fetchComments();
   }, [articleId]);
+
+  async function handleAdd(e: FormEvent) {
+    e.preventDefault();
+
+    if (!newBody.trim()) {
+      setError("Comment cannot be empty.");
+      return;
+    }
+
+    const response = await fetch(
+      `http://localhost:8080/articles/${articleId}/comments`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ body: newBody }),
+      },
+    );
+    const newComment = await response.json();
+    setComments([...comments, newComment]);
+    setNewBody("");
+    setError("");
+  }
 
   return (
     <section>
@@ -36,6 +60,15 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
           ))}
         </ul>
       )}
+      <form onSubmit={handleAdd}>
+        <textarea
+          placeholder="Write a comment"
+          value={newBody}
+          onChange={(e) => setNewBody(e.target.value)}
+        />
+        {error && <p>{error}</p>}
+        <button type="submit">Add Comment</button>
+      </form>
     </section>
   );
 }
