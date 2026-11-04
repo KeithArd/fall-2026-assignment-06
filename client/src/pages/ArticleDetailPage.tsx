@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 type Article = {
   articleId: number;
@@ -9,6 +9,7 @@ type Article = {
 
 function ArticleDetailPage() {
   const { articleId } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
@@ -22,6 +23,13 @@ function ArticleDetailPage() {
     fetchArticle();
   }, [articleId]);
 
+  async function handleDelete() {
+    await fetch(`http://localhost:8080/articles/${articleId}`, {
+      method: "DELETE",
+    });
+    navigate("/");
+  }
+
   if (!article) {
     return <p>Loading...</p>;
   }
@@ -30,6 +38,7 @@ function ArticleDetailPage() {
     <div>
       <h1>{article.title}</h1>
       <p>{article.contents}</p>
+      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 }
