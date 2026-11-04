@@ -1,9 +1,15 @@
+import { Route, Routes } from "react-router";
+import ArticleListPage from "./pages/ArticleListPage.tsx";
+import CreateArticlePage from "./pages/CreateArticlePage.tsx";
+import ArticleDetailPage from "./pages/ArticleDetailPage.tsx";
+
 function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
-      <p>This is a React app.</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<ArticleListPage />} />
+      <Route path="/articles/new" element={<CreateArticlePage />} />
+      <Route path="/articles/:articleId" element={<ArticleDetailPage />} />
+    </Routes>
   );
 }
 
