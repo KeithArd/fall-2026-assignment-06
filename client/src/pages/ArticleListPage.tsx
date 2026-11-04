@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 type Article = {
   articleId: number;
@@ -9,9 +9,8 @@ type Article = {
 
 const previewLength = 100; // Number of characters to display in the article preview
 
-// ** helper functions **
-
-// Truncates the article contents if it exceeds the preview length and adds an ellipsis
+//                         ***** HELPER FUNCTIONS **
+// truncates the article contents if it exceeds the preview length
 function truncateContents(contents: string): string {
   if (contents.length <= previewLength) {
     return contents;
@@ -19,9 +18,9 @@ function truncateContents(contents: string): string {
   return contents.substring(0, previewLength) + "...";
 }
 
-// Converts JSON article data to JSX elements
-// Returns a list item with a link to the article detail page
-// truncates the article contents to display a preview of the article
+// renders ArticleListPage component
+//      returns a list item with a link to the article detail page
+//      truncates the article contents to display a preview of the article
 function renderArticle(article: Article) {
   return (
     <li key={article.articleId}>
@@ -34,6 +33,8 @@ function renderArticle(article: Article) {
 function ArticleListPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchArticles() {
       const response = await fetch(
@@ -48,6 +49,7 @@ function ArticleListPage() {
   return (
     <div>
       <h1>Article List</h1>
+      <button onClick={() => navigate("/articles/new")}>Create Article</button>
       <input
         placeholder="Search articles..."
         value={searchTerm}
