@@ -37,7 +37,7 @@ function CreateArticlePage() {
         value={contents}
         onChange={(e) => setContents(e.target.value)}
       />
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
       <button type="submit">Create Article</button>
     </form>
   );

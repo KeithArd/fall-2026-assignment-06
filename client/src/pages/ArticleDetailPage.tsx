@@ -11,14 +11,21 @@ function ArticleDetailPage() {
   const [editTitle, setEditTitle] = useState("");
   const [editContents, setEditContents] = useState("");
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     async function fetchArticle() {
-      const response = await fetch(
-        `http://localhost:8080/articles/${articleId}`,
-      );
-      const data = await response.json();
-      setArticle(data);
+      try {
+        const response = await fetch(
+          `http://localhost:8080/articles/${articleId}`,
+        );
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+        setArticle(await response.json());
+      } catch {
+        setLoadError("Could not load this article.");
+      }
     }
     fetchArticle();
   }, [articleId]);
@@ -59,6 +66,10 @@ function ArticleDetailPage() {
     setIsEditing(false);
   }
 
+  if (loadError) {
+    return <p className="error">{loadError}</p>;
+  }
+
   if (!article) {
     return <p>Loading...</p>;
   }
@@ -77,7 +88,7 @@ function ArticleDetailPage() {
           value={editContents}
           onChange={(e) => setEditContents(e.target.value)}
         />
-        {error && <p>{error}</p>}
+        {error && <p className="error">{error}</p>}
         <button type="submit">Save</button>
         <button type="button" onClick={() => setIsEditing(false)}>
           Cancel

@@ -51,7 +51,7 @@ function CommentItem({ comment, onUpdate, onDelete }: CommentItemProps) {
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
           />
-          {error && <p>{error}</p>}
+          {error && <p className="error">{error}</p>}
           <button type="submit">Save</button>
           <button type="button" onClick={() => setIsEditing(false)}>
             Cancel

@@ -28,15 +28,26 @@ function renderArticle(article: Article) {
 function ArticleListPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchArticles() {
-      const response = await fetch(
-        `http://localhost:8080/articles?title_contains=${encodeURIComponent(searchTerm)}`,
-      );
-      const data = await response.json();
-      setArticles(data);
+      setLoadError("");
+      try {
+        const response = await fetch(
+          `http://localhost:8080/articles?title_contains=${encodeURIComponent(searchTerm)}`,
+        );
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+        setArticles(await response.json());
+      } catch {
+        setLoadError("Could not load articles.");
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchArticles();
   }, [searchTerm]);
@@ -50,6 +61,11 @@ function ArticleListPage() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      {isLoading && <p>Loading...</p>}
+      {loadError && <p className="error">{loadError}</p>}
+      {!isLoading && !loadError && articles.length === 0 && (
+        <p>No articles found.</p>
+      )}
       <ul>{articles.map(renderArticle)}</ul>
     </div>
   );

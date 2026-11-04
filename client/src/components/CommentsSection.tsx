@@ -10,14 +10,21 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newBody, setNewBody] = useState("");
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     async function fetchComments() {
-      const response = await fetch(
-        `http://localhost:8080/articles/${articleId}/comments`,
-      );
-      const data = await response.json();
-      setComments(data);
+      try {
+        const response = await fetch(
+          `http://localhost:8080/articles/${articleId}/comments`,
+        );
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+        setComments(await response.json());
+      } catch {
+        setLoadError("Could not load comments.");
+      }
     }
     fetchComments();
   }, [articleId]);
@@ -63,7 +70,8 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
   return (
     <section>
       <h2>Comments</h2>
-      {comments.length === 0 ? (
+      {loadError && <p className="error">{loadError}</p>}
+      {!loadError && comments.length === 0 ? (
         <p>No comments yet.</p>
       ) : (
         <ul>
@@ -83,7 +91,7 @@ function CommentsSection({ articleId }: CommentsSectionProps) {
           value={newBody}
           onChange={(e) => setNewBody(e.target.value)}
         />
-        {error && <p>{error}</p>}
+        {error && <p className="error">{error}</p>}
         <button type="submit">Add Comment</button>
       </form>
     </section>
