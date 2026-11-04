@@ -102,3 +102,9 @@ section {
 .error {
   color: var(--color-error);
 }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

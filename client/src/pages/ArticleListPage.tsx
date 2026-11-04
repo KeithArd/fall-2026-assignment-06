@@ -54,8 +54,12 @@ function ArticleListPage() {
 
   return (
     <div>
-      <h1>Article List</h1>
-      <button onClick={() => navigate("/articles/new")}>Create Article</button>
+      <div className="page-header">
+        <h1>Article List</h1>
+        <button onClick={() => navigate("/articles/new")}>
+          Create Article
+        </button>
+      </div>
       <input
         placeholder="Search articles..."
         value={searchTerm}
