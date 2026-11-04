@@ -55,7 +55,7 @@ function ArticleListPage() {
   return (
     <div>
       <div className="page-header">
-        <h1>Article List</h1>
+        <h1>Articles</h1>
         <button onClick={() => navigate("/articles/new")}>
           Create Article
         </button>
